@@ -1,0 +1,3 @@
+﻿const PLAYER_BASIC_RANGE = 400;
+const PLAYER_BASIC_SPEED = 4;
+const LIGHT_WIDTH = 50;

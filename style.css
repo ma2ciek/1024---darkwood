@@ -3,3 +3,6 @@ body {
     overflow: hidden;
     background: #000;
 }
+canvas {
+    cursor: url("target.png") 8 8, auto;
+}

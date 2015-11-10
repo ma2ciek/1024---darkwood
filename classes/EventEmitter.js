@@ -2,7 +2,7 @@ function EventEmitter() {
 	this._events = {};
 }
 
-EventEmitter.prototype.addEventListener = function (eventType, eventHandler) {
+EventEmitter.prototype.on = function (eventType, eventHandler) {
 	if (!this._events[eventType])
 		this._events[eventType] = [];
 	if (typeof eventHandler !== 'function')
@@ -20,7 +20,7 @@ EventEmitter.prototype.emit = function (eventType) {
 	}
 };
 
-EventEmitter.prototype.removeEventListener = function (eventType, eventHandler) {
+EventEmitter.prototype.off = function (eventType, eventHandler) {
 	if (typeof this._events[eventType] === 'undefined')
 		return;
 

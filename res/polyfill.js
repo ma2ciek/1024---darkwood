@@ -28,6 +28,9 @@ function extend(dest, src) {
     dest.prototype = Object.create(src.prototype, {
         constructor: {
             value: dest.prototype
+        },
+        _master: {
+            value: src.prototype
         }
     });
 }

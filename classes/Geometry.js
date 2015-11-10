@@ -77,7 +77,7 @@ Vector.prototype.toSize = function (x) {
 Vector.prototype.getAngle = function() {
 	if(this.dim !== 2)
 		throw new Error("Wrong dim.");
-	return Math.atan2(this[1], this[0]);
+	return Math.PI + Math.atan2(this[1], this[0]);
 };
 
 Vector.prototype.scale = function (x) {
@@ -108,3 +108,8 @@ Vector.createFromFlapArray = function (radius, i) {
 	var y = i / (radius << 1) | 0;
 	return new Vector(radius - x, radius - y);
 };
+
+function Point(x, y) {
+    this.x = x;
+    this.y = y;
+}
