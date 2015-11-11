@@ -45,6 +45,13 @@ _p.drawLights = function (ctx) {
     }
 }
 
+_p.drawAtTheEnd = function (ctx) {
+    for (var i = 0; i < this._list.length; i++) {
+        var object = this._list[i];
+        object.drawAtTheEnd && object.drawAtTheEnd(ctx);
+    }
+}
+
 _p.move = function () {
     for (var i = 0; i < this._list.length; i++) {
         var object = this._list[i];

@@ -147,10 +147,10 @@ _p._drawFlashLight = function () {
     v.toSize(50);
     var x = canvas.width / 2 - v[0];
     var y = canvas.height / 2 - v[1];
-
+    var maxPower = Math.min(1, Math.PI / 12 / fi)
     var gradient = ctx.createRadialGradient(x, y, 0, x, y, this._range);
     gradient.addColorStop(1, 'rgba(0,0,0,0)');
-    gradient.addColorStop(0, 'rgba(255,255,255,0.5)');
+    gradient.addColorStop(0, 'rgba(255,255,255,' + maxPower + ')');
     drawArc(ctx, x, y, this._range, gradient, angle - fi, angle + fi);
 }
 

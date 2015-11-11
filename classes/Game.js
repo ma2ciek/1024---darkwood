@@ -87,8 +87,13 @@ _p._render = function () {
 
     this._drawLights();
     this._drawVisibleElements();
+    this._drawForeground();
 
     user.drawTooltip();
+}
+
+_p._drawForeground = function () {
+    objects.drawAtTheEnd();
 }
 
 _p._drawLights = function () {

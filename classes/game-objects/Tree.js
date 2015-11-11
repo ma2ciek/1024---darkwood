@@ -6,7 +6,7 @@
 
 extend(Tree, GameObject);
 
-Tree.prototype.draw = function () {
+Tree.prototype.drawAtTheEnd = function () {
     var pos = getScreenPosition(this);
     ctx.drawImage(this._img,
         0, 0, this._img.width, this._img.height,

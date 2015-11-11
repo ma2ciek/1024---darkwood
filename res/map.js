@@ -24,6 +24,7 @@
         y: 550,
         r: 300,
         type: 'lamp',
+        power: 1,
         on: false
     }, {
         x: 250,

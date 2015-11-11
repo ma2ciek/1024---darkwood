@@ -8,15 +8,10 @@
 }
 var _p = GameObject.prototype;
 
-_p.draw = function (ctx) {
-    var pos = getScreenPosition(this);
-    ctx.fillStyle = this.color;
-    ctx.fillRect(pos.x, pos.y, this.w, this.h);
-    ctx.closePath();
+_p.draw = function () {
 };
 
 _p.move = function () {
-
 }
 
 _p.testCollision = function (x, y) {
