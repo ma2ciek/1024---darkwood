@@ -10,7 +10,8 @@ var _p = GameObjectManager.prototype
 _p._createClassList = function () {
     this._classes = {
         wall: Wall,
-        lamp: Lamp
+        lamp: Lamp,
+        tree: Tree
     }
 }
 
@@ -37,6 +38,13 @@ _p.draw = function (ctx) {
     }
 }
 
+_p.drawLights = function (ctx) {
+    for (var i = 0; i < this._list.length; i++) {
+        var object = this._list[i];
+        object.drawLight && object.drawLight(ctx);
+    }
+}
+
 _p.move = function () {
     for (var i = 0; i < this._list.length; i++) {
         var object = this._list[i];
@@ -48,6 +56,8 @@ _p.get = function (x, y, callback) {
     var wsp = getWorldPosition(x, y);
     for (var i = 0; i < this._list.length; i++) {
         var object = this._list[i];
+        if (!object.click)
+            return;
         var collision = object.testCollision(x, y)
         if (collision) {
             callback && callback(object);

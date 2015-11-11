@@ -19,6 +19,30 @@
         y: 800,
         r: 200,
         type: 'lamp'
+    }, {
+        x: 550,
+        y: 550,
+        r: 300,
+        type: 'lamp',
+        on: false
+    }, {
+        x: 250,
+        y: 650,
+        size: 300,
+        type: 'tree',
+        imgName: 'tree1'
+    }, {
+        x: 400,
+        y: 650,
+        size: 400,
+        type: 'tree',
+        imgName: 'tree2'
+    }, {
+        x: 600,
+        y: 650,
+        size: 400,
+        type: 'tree',
+        imgName: 'tree3'
     }],
     creatures: [{
         x: 600,

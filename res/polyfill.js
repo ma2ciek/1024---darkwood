@@ -34,3 +34,11 @@ function extend(dest, src) {
         }
     });
 }
+
+function copy(dest, src) {
+    for (var i in src) {
+        if (src.hasOwnProperty(i)) {
+            dest[i] = src[i];
+        }
+    }
+}

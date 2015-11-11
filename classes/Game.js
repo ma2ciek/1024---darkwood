@@ -1,8 +1,9 @@
 ﻿function Game() {
     this._frameIndex = 0;
     this._paused = 0;
-    this.counter = new Counter(2, this.init.bind(this));
+    this.counter = new Counter(3, this.init.bind(this));
     this._loadAudio();
+    this._loadImages();
 }
 var _p = Game.prototype;
 
@@ -21,35 +22,14 @@ _p._createSoundTrack = function () {
     this._soundtrack = new SoundTrack(this._audioList);
 }
 
-_p.play = function () {
-    if (this._paused)
-        return;
+_p._loadImages = function () {
+    var self = this;
+    loadImages(images, function (imgList) {
+        images = imgList;
+        self.counter.count();
+    });
+};
 
-    player.move();
-    objects.move();
-    opponents.move();
-
-
-    canvas.clear();
-    player.drawLights();
-    objects.draw(ctx);
-
-    ctx.globalCompositeOperation = 'source-atop'
-    
-    opponents.draw();
-    ctx.globalCompositeOperation = 'source-over'
-
-    player.draw();
-
-    user.drawTooltip();
-
-    this._frameIndex++;
-    window.requestAnimationFrame(this.play.bind(this));
-}
-
-_p.over = function () {
-    this._paused = 1;
-}
 
 _p.getFrameNr = function () {
     return this._frameIndex;
@@ -59,11 +39,15 @@ _p.init = function () {
     this._getCanvas();
     this._setCanvasSize();
     this._setCanvasEventHandlers();
+    this._createGlobalObjects();
+    this._play();
+    this._soundtrack.play();
+}
+
+_p._createGlobalObjects = function () {
     player = new Player();
     opponents = new OpponentManager(map);
     objects = new GameObjectManager(map);
-    this.play();
-    this._soundtrack.play();
 }
 
 _p._getCanvas = function () {
@@ -79,4 +63,48 @@ _p._setCanvasSize = function () {
 _p._setCanvasEventHandlers = function () {
     // TODO: move to User.js
     window.addEventListener('resize', this._setCanvasSize);
+}
+
+
+_p._play = function () {
+    if (this._paused)
+        return;
+    this._moveObjects();
+    this._render();
+    this._frameIndex++;
+    window.requestAnimationFrame(this._play.bind(this));
+}
+
+_p._moveObjects = function () {
+    player.move();
+    objects.move();
+    opponents.move();
+    bullets.move();
+}
+
+_p._render = function () {
+    canvas.clear();
+
+    this._drawLights();
+    this._drawVisibleElements();
+
+    user.drawTooltip();
+}
+
+_p._drawLights = function () {
+    player.drawLights();
+    objects.drawLights();
+}
+
+_p._drawVisibleElements = function () {
+    ctx.globalCompositeOperation = 'source-atop';
+    opponents.draw();
+    player.draw();
+    objects.draw(ctx);
+    bullets.draw(ctx);
+    ctx.globalCompositeOperation = 'source-over';
+}
+
+_p.over = function () {
+    this._paused = 1;
 }

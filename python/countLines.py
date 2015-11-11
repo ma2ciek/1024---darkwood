@@ -1,7 +1,7 @@
 ﻿from os import listdir
 from os.path import isfile, join, isdir
 
-dirs = ['classes', 'res', 'main.js']
+dirs = ['classes', 'res', 'main.js', 'modules']
 files = ['../main.js']
 linesAmount = 0
 emptyLinesAmount = 0
@@ -21,10 +21,10 @@ def countFiles(path):
         lines = f.readlines()
         emptyLines = len([x for x in lines if x in ['\n', '\r\n']])
         emptyLinesAmount += emptyLines
-        ll = len(lines) - emptyLines
-        linesAmount += ll
+        currentFileLinesNumber = len(lines) - emptyLines
+        linesAmount += currentFileLinesNumber
         filesAmount += 1;
-        print "%5d %s " %( ll, path)
+        print "%5d %s " %( currentFileLinesNumber, path)
     elif isdir(path):
         dirs = listdir(path)
         for file in dirs:
@@ -34,4 +34,4 @@ for dir in dirs:
     countFiles('../' + dir)
 print ""
 print "%5d lines of code in %d files" % (linesAmount, filesAmount)
-print "%5d empty lines" %emptyLinesAmount
+print "%5d empty lines" % emptyLinesAmount

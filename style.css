@@ -4,5 +4,5 @@ body {
     background: #000;
 }
 canvas {
-    cursor: url("target.png") 8 8, auto;
+    cursor: url("images/target.png") 8 8, auto;
 }

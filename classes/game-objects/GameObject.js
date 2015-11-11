@@ -20,14 +20,10 @@ _p.move = function () {
 }
 
 _p.testCollision = function (x, y) {
-    if (this.x < x && this.x + w > x && this.y < y && this.y + w > y)
-        return true;
+    //if (this.x < x && this.x + w > x && this.y < y && this.y + w > y)
+    //    return true;
 }
 
 _p.getName = function () {
     return this.type;
-}
-
-_p.click = function () {
-    
 }

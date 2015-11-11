@@ -72,3 +72,7 @@ _p.getDamage = function (dmg) {
         opponents.remove(this);
     }
 }
+
+_p.isAlive = function () {
+    return this._life > 0;
+}

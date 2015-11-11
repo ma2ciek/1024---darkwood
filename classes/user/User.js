@@ -12,10 +12,22 @@ User.prototype._addEventHandlers = function () {
     window.addEventListener('mousemove', function (e) {
         this.mx = e.clientX;
         this.my = e.clientY;
-        this.emit("mousemove", e.clientX,  e.clientY)
+        this.emit("mousemove", e.clientX, e.clientY)
     }.bind(this));
     window.addEventListener('click', this.leftClick.bind(this));
-}
+    window.addEventListener('contextmenu', function (e) {
+        player.distanceAttack(e.clientX, e.clientY);
+        e.preventDefault();
+        e.stopPropagation();
+    });
+    this._handleKeyboardEvents();
+};
+
+_p._handleKeyboardEvents = function () {
+    keyboard.watch('tab', function () {
+        player._toggleWeapon();
+    });
+};
 
 _p.leftClick = function (e) {
     if (e) {
@@ -40,10 +52,15 @@ _p.leftClick = function (e) {
 _p.drawTooltip = function () {
     var wsp = getWorldPosition(user.mx, user.my)
     this._hoverObject = null;
+
     opponents.get(wsp.x, wsp.y, function (opponent) {
         drawText(ctx, opponent.getName(), user.mx, user.my - 20, '#FFF', 'center', 'middle')
         this._hoverObject = opponent;
     }.bind(this));
+
+    if (this._hoverObject)
+        return;
+
     objects.get(wsp.x, wsp.y, function (object) {
         drawText(ctx, object.getName(), user.mx, user.my - 20, '#FFF', 'center', 'middle')
         this._hoverObject = object;

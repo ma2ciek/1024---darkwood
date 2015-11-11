@@ -10,7 +10,6 @@
     this._weapon = weapons[this._weaponId];
     this._sprites = {};
     this._currentSpriteName = 'flashLightIdle';
-    this._handleEvents();
     this._loadSprites();
     this._audio = {
         rifle: audio['rifle'].cloneNode()
@@ -18,11 +17,6 @@
 }
 
 var _p = Player.prototype;
-
-_p._handleEvents = function () {
-    keyboard.watch('tab', this._toggleWeapon.bind(this));
-    window.addEventListener('contextmenu', this.distanceAttack.bind(this))
-}
 
 _p._loadSprites = function () {
     var self = this;
@@ -44,23 +38,31 @@ _p.attack = function (opponent) {
         this._setStatus('Attack', function (spriteName) {
             console.log(this, this.constructor.prototype);
             this._sprites[spriteName].onAnimationEnd = function () {
-                this.idle();
                 opponent.getDamage(this._weapon.dmg);
+                if(opponent.isAlive())
+                    this.moveTo(opponent.getPos(), 50, this.attack.bind(this, opponent));
+                else
+                    this.idle();
             }.bind(this);
         }.bind(this));
     }
     else
         this.moveTo(opponent.getPos(), 50, this.attack.bind(this, opponent));
-
 };
 
-_p.distanceAttack = function (e) {
-    e.preventDefault();
-    e.stopPropagation();
+_p.distanceAttack = function () {
     this._setStatus('DistanceAttack', function (spriteName) {
         this._sprites[spriteName].onAnimationEnd = this.idle.bind(this);
         this._audio.rifle.currentTime = 0;
         this._audio.rifle.play();
+        var pos = getWorldPosition(user.mx, user.my);
+        bullets.add({
+            x: this._x,
+            y: this._y,
+            speed: 15,
+            destX: pos.x,
+            destY: pos.y
+        })
     }.bind(this));
 };
 
@@ -85,7 +87,7 @@ _p._setStatus = function (status, callback) {
 _p.move = function () {
     this._hp = Math.min(this._maxHp, this._hp + this._regeneration);
     var speed = this._baseSpeed;
-    var v = new Vector(keys.rightArrow - keys.leftArrow, keys.downArrow - keys.upArrow);
+    var v = new Vector(keys.D - keys.A, keys.S - keys.W);
     if (v.getSize() != 0)
         this._dest = null;
 
