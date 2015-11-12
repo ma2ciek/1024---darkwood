@@ -63,16 +63,23 @@ _p.getCurrentSprite = function () {
 
 _p.getPos = function () {
     return this._position;
-}
+};
 
 _p.getDamage = function (dmg) {
     this._life -= dmg;
     console.log(this._life);
     if (this._life <= 0) {
         opponents.remove(this);
+        this.onDeathEvent && this.onDeathEvent();
     }
-}
+};
 
 _p.isAlive = function () {
     return this._life > 0;
-}
+};
+
+_p._isOnScreen = function () {
+    var onScreenX = Math.abs(this._position.x - player.getX()) < canvas.width / 2;
+    var onScreenY = Math.abs(this._position.y - player.getY()) < canvas.height / 2;
+    return onScreenX && onScreenY;
+};

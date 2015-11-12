@@ -54,15 +54,17 @@ _p.drawTooltip = function () {
     this._hoverObject = null;
 
     opponents.get(wsp.x, wsp.y, function (opponent) {
-        drawText(ctx, opponent.getName(), user.mx, user.my - 20, '#FFF', 'center', 'middle')
+        var name = opponent.getName();
+        drawText(ctx, name, user.mx, user.my - 20, '#FFF', 'center', 'middle');
         this._hoverObject = opponent;
     }.bind(this));
 
     if (this._hoverObject)
         return;
 
-    objects.get(wsp.x, wsp.y, function (object) {
-        drawText(ctx, object.getName(), user.mx, user.my - 20, '#FFF', 'center', 'middle')
+    objects.findInteractive(wsp.x, wsp.y, 0, function (object) {
+        var name = object.getName();
+        drawText(ctx, name, user.mx, user.my - 20, '#FFF', 'center', 'middle');
         this._hoverObject = object;
     }.bind(this));
 }

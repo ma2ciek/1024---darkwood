@@ -1,18 +1,14 @@
 ﻿function Tree(params) {
     GameObject.call(this, params);
+    this._size = params.size;
     this._img = images[params.imgName];
-    this.size = params.size;
 }
 
 extend(Tree, GameObject);
 
 Tree.prototype.drawAtTheEnd = function () {
-    var pos = getScreenPosition(this);
+    var pos = getFgScreenPosition(this);
     ctx.drawImage(this._img,
         0, 0, this._img.width, this._img.height,
-        pos.x - this.size / 2, pos.y - this.size / 2, this.size, this.size * this._img.height / this._img.width);
-}
-
-Tree.prototype.testCollision = function (x, y) {
-    return new Vector(x - this.x, y - this.y).getSize() < this.size;
+        pos.x - this._size / 2, pos.y - this._size / 2, this._size, this._size * this._img.height / this._img.width);
 };

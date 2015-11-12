@@ -21,18 +21,16 @@ function getScreenPosition(o) {
     }
 }
 
+function getFgScreenPosition(o) {
+    return {
+        x: (o.x - player.getX()) * 6/5 + canvas.width / 2,
+        y: (o.y - player.getY()) * 6/5 + canvas.height / 2
+    }
+}
+
 function getWorldPosition(x, y) {
     return {
         x: x + player.getX() - canvas.width / 2,
         y: y + player.getY() - canvas.height / 2
     }
-}
-
-function rand(x, y) {
-    return Math.random() * (y - x) + x;
-}
-
-function chance(chance, fn, args) {
-    if (Math.random() < chance)
-        fn.call(null, args);
 }

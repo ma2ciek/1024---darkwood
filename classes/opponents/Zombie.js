@@ -26,9 +26,25 @@ Zombie.prototype.move = function () {
         return;
     }
 
-    if(!this._sawPlayer) {
+    if (!this._sawPlayer) {
         this._audio.iSeeYou.play();
         this._sawPlayer = true;
     }
     this.moveToPlayer();
-}
+};
+
+Zombie.prototype.onDeathEvent = function () {
+    objects.createElement({
+        x: this._position.x,
+        y: this._position.y,
+        r: 40,
+        type: 'trophy',
+        name: 'brain',
+        imgName: 'brain'
+    });
+    objects.createElement({
+        x: this._position.x,
+        y: this._position.y,
+        type: 'blood'
+    });
+};

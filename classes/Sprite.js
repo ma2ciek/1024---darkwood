@@ -30,13 +30,13 @@ _p.draw = function (ctx, x, y, rotation) {
     var h = this._height;
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(Math.PI + rotation);
+    ctx.rotate(rotation);
     ctx.translate(-this._frameCenter.x, -this._frameCenter.y);
     ctx.drawImage(this._img, this._index * w, 0, w, h, 0, 0, w * this._zoom, h * this._zoom);
 
     ctx.restore()
 
-    drawArc(ctx, x, y, 3, "red");
+    // drawArc(ctx, x, y, 3, "red");
 }
 
 _p.getCenterPosition = function () {

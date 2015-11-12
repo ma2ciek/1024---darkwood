@@ -77,7 +77,7 @@ Vector.prototype.toSize = function (x) {
 Vector.prototype.getAngle = function() {
 	if(this.dim !== 2)
 		throw new Error("Wrong dim.");
-	return Math.PI + Math.atan2(this[1], this[0]);
+	return Math.atan2(this[1], this[0]);
 };
 
 Vector.prototype.scale = function (x) {

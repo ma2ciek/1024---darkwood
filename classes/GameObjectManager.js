@@ -11,18 +11,19 @@ _p._createClassList = function () {
     this._classes = {
         wall: Wall,
         lamp: Lamp,
-        tree: Tree
+        tree: Tree,
+        bg: Background,
+        blood: Blood,
+        trophy: Trophy
     }
 }
 
 _p._loadMap = function (map) {
-    for (var i = 0; i < map.data.length; i++) {
-        var o = map.data[i];
-        this._loadElement(o);
-    }
+    for (var mapElement of map.data)
+        this.createElement(mapElement);
 }
 
-_p._loadElement = function(o) {
+_p.createElement = function(o) {
     var creator = this._classes[o.type];
     if(typeof creator == 'undefined')
         throw new Error('missing class: ' + o.type);
@@ -32,42 +33,61 @@ _p._loadElement = function(o) {
 }
 
 _p.draw = function (ctx) {
-    for (var i = 0; i < this._list.length; i++) {
-        var object = this._list[i];
-        object.draw(ctx);
-    }
+    for (var object of this._list)
+        object._isOnScreen() && object.draw && object.draw(ctx);
 }
 
 _p.drawLights = function (ctx) {
-    for (var i = 0; i < this._list.length; i++) {
-        var object = this._list[i];
-        object.drawLight && object.drawLight(ctx);
-    }
+    for (var object of this._list)
+        object._isOnScreen() && object.drawLight && object.drawLight(ctx);
 }
 
 _p.drawAtTheEnd = function (ctx) {
-    for (var i = 0; i < this._list.length; i++) {
-        var object = this._list[i];
-        object.drawAtTheEnd && object.drawAtTheEnd(ctx);
-    }
+    for (var object of this._list)
+        object._isOnScreen() && object.drawAtTheEnd && object.drawAtTheEnd(ctx);
 }
 
 _p.move = function () {
-    for (var i = 0; i < this._list.length; i++) {
-        var object = this._list[i];
+    for (var object of this._list)
         object.move();
-    }
 }
 
-_p.get = function (x, y, callback) {
+_p.findInteractive = function (x, y, r, success, failure) {
     var wsp = getWorldPosition(x, y);
-    for (var i = 0; i < this._list.length; i++) {
-        var object = this._list[i];
+    for (var object of this._list) {
         if (!object.click)
-            return;
-        var collision = object.testCollision(x, y)
+            continue;
+
+        var collision = object.testCollision(x, y, r)
         if (collision) {
-            callback && callback(object);
+            success(object);
         }
     }
+    failure && failure();
+}
+
+_p.findCollision = function (x, y, r, success, failure) {
+    for (var object of this._list) {
+        if (!object.collision)
+            continue;
+
+        var collision = object.testCollision(x, y, r)
+        if (collision)
+            success && success(object)
+    }
+    failure && failure();
+}
+
+_p.findInRange = function (x, y, r) {
+    var arr = [];
+    for (var object of this._list) {
+        var collision = object.testCollision(x, y, r)
+        if (collision)
+            arr.push(object);
+    }
+    return arr;
+}
+
+_p.remove = function (o) {
+    removeElement(this._list, o);
 }

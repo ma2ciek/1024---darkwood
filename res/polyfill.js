@@ -42,3 +42,20 @@ function copy(dest, src) {
         }
     }
 }
+
+
+function rand(x, y) {
+    return Math.random() * (y - x) + x;
+}
+
+function chance(chance, fn, args) {
+    if (Math.random() < chance)
+        fn.call(null, args);
+}
+
+function removeElement(array, item) {
+    var index = array.indexOf(item);
+    if (index == -1)
+        return -1;
+    return array.splice(index, 1);
+}

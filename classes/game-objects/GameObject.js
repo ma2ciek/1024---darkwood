@@ -4,21 +4,22 @@
     this.y = params.y;
     this.w = params.w;
     this.h = params.h;
-    this.color = params.color;
 }
 var _p = GameObject.prototype;
 
-_p.draw = function () {
+_p.move = function () {
 };
 
-_p.move = function () {
-}
-
 _p.testCollision = function (x, y) {
-    //if (this.x < x && this.x + w > x && this.y < y && this.y + w > y)
-    //    return true;
-}
+    return false;
+};
 
 _p.getName = function () {
-    return this.type;
-}
+    return this.name || this.type;
+};
+
+_p._isOnScreen = function () {
+    var onScreenX = Math.abs(this.x - player.getX()) < canvas.width / 2;
+    var onScreenY = Math.abs(this.y - player.getY()) < canvas.height / 2;
+    return onScreenX && onScreenY;
+};

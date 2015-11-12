@@ -42,6 +42,7 @@ _p.init = function () {
     this._createGlobalObjects();
     this._play();
     this._soundtrack.play();
+    toggleFullScreen();
 }
 
 _p._createGlobalObjects = function () {
@@ -92,10 +93,6 @@ _p._render = function () {
     user.drawTooltip();
 }
 
-_p._drawForeground = function () {
-    objects.drawAtTheEnd();
-}
-
 _p._drawLights = function () {
     player.drawLights();
     objects.drawLights();
@@ -103,11 +100,15 @@ _p._drawLights = function () {
 
 _p._drawVisibleElements = function () {
     ctx.globalCompositeOperation = 'source-atop';
+    objects.draw(ctx);
     opponents.draw();
     player.draw();
-    objects.draw(ctx);
     bullets.draw(ctx);
     ctx.globalCompositeOperation = 'source-over';
+}
+
+_p._drawForeground = function () {
+    objects.drawAtTheEnd();
 }
 
 _p.over = function () {
