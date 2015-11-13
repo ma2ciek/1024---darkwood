@@ -11,7 +11,6 @@ _p._loadAudio = function () {
     var self = this;
     loadAudioFiles(audioUrls, function (list) {
         audio = list;
-        console.log(list);
         self._createSoundTrack();
         self.counter.count();
     });
@@ -47,8 +46,8 @@ _p.init = function () {
 
 _p._createGlobalObjects = function () {
     player = new Player();
-    opponents = new OpponentManager(map);
-    objects = new GameObjectManager(map);
+    opponents = new OpponentManager(randomMap);
+    objects = new GameObjectManager(randomMap);
 }
 
 _p._getCanvas = function () {

@@ -81,6 +81,9 @@ _p.findCollision = function (x, y, r, success, failure) {
 _p.findInRange = function (x, y, r) {
     var arr = [];
     for (var object of this._list) {
+        if (!object.collision)
+            continue;
+
         var collision = object.testCollision(x, y, r)
         if (collision)
             arr.push(object);

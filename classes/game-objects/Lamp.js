@@ -9,6 +9,11 @@
     this._on = typeof params.on == 'boolean' ? params.on : 1;
     this._actionRadius = this.radius + 10;
     this._img = images["lamp"];
+
+    this._lightAura = new Light(this.range);
+    this._lightAura.set({
+        power: this.power
+    });
 }
 
 extend(Lamp, GameObject);
@@ -43,11 +48,11 @@ Lamp.prototype.drawAtTheEnd = function () {
 Lamp.prototype.drawLight = function () {
     if (!this._on)
         return;
+
+    this._lightAura.create(this.x, this.y);
+    var img = this._lightAura.getImage();
     var pos = getScreenPosition(this);
-    var gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, this.range);
-    gradient.addColorStop(1, 'rgba(0,0,0,0)');
-    gradient.addColorStop(0, 'rgba(255,255,255,' + this.power + ')');
-    drawArc(ctx, pos.x, pos.y, this.range, gradient);
+    ctx.drawImage(img, pos.x - this.range, pos.y - this.range);
 };
 
 Lamp.prototype.testCollision = function (x, y, r) {
@@ -65,4 +70,10 @@ Lamp.prototype.click = function () {
 
 Lamp.prototype.toggle = function () {
     this._on = !this._on;
+};
+
+Lamp.prototype._isOnScreen = function () {
+    var onScreenX = Math.abs(this.x - player.getX()) < canvas.width / 2 + this.range;
+    var onScreenY = Math.abs(this.y - player.getY()) < canvas.height / 2 + this.range;
+    return onScreenX && onScreenY;
 };

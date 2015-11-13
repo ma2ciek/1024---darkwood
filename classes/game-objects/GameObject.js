@@ -19,7 +19,7 @@ _p.getName = function () {
 };
 
 _p._isOnScreen = function () {
-    var onScreenX = Math.abs(this.x - player.getX()) < canvas.width / 2;
+    var onScreenX = Math.abs(this.x - player.getX()) < canvas.width / 2 ;
     var onScreenY = Math.abs(this.y - player.getY()) < canvas.height / 2;
     return onScreenX && onScreenY;
 };

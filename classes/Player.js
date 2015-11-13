@@ -1,24 +1,24 @@
 ﻿function Player() {
     this._x = 100;
     this._y = 100;
+    this._radius = 40;
     this._hp = 100;
     this._maxHp = 100;
     this._regeneration = 1 / 20;
-    this._range = PLAYER_BASIC_RANGE;
-    this._lightRange = PLAYER_LIGHT_RANGE = 150;
+
+    this._lightAura = new Light(PLAYER_LIGHT_RANGE);
+    this._flashlightAura = new Light(items.flashlight.range);
+    this._audio = { rifle: audio['rifle'].cloneNode() };
+
+    this._equipment = new Equipment();
     this._weaponId = 0;
     this._weapon = weapons[this._weaponId];
+
     this._sprites = {};
     this._currentSpriteName = 'flashLightIdle';
-    this._audio = {
-        rifle: audio['rifle'].cloneNode()
-    }
-    this._radius = 40;
-
     this._loadSprites();
-    this._createLightCanvas();
-    this._rotation = 0;
-    this._equipment = new Equipment();
+
+    this._currentOpponent = null;
 }
 
 var _p = Player.prototype;
@@ -35,13 +35,6 @@ _p._loadSprites = function () {
         }
     });
 };
-
-_p._createLightCanvas = function () {
-    this._canvas = document.createElement('canvas');
-    this._canvas.width = PLAYER_LIGHT_RANGE * 2;
-    this._canvas.height = PLAYER_LIGHT_RANGE * 2;
-    this._ctx = this._canvas.getContext('2d');
-}
 
 _p.attack = function (opponent) {
     this._currentOpponent = opponent;
@@ -114,7 +107,7 @@ _p._regenerate = function () {
 
 _p._calculatePlayerVelocity = function () {
     this._velocity = new Vector(keys.D - keys.A, keys.S - keys.W);
-    if (this._velocity.getSize()) {
+    if (this._velocity.getSize() != 0) {
         // move / keyboard interruption
         this._dest = null;
     } else if (this._dest) {
@@ -125,18 +118,19 @@ _p._calculatePlayerVelocity = function () {
         }
     } else
         return;
-    keys.shift ? this._velocity.toSize(this._baseSpeed * 2)
-               : this._velocity.toSize(this._baseSpeed * 1);
+    keys.shift ? this._velocity.toSize(PLAYER_BASIC_SPEED * 2)
+               : this._velocity.toSize(PLAYER_BASIC_SPEED * 1);
 };
 
 _p._setMoveStatus = function () {
     !this._isFighting() && this._setStatus('Move', function (spriteName) {
-        this._sprites[spriteName].onAnimationEnd = this.idle.bind(this);
+        if (this._sprites[spriteName])
+            this._sprites[spriteName].onAnimationEnd = this.idle.bind(this);
     }.bind(this));
 };
 
 _p._handleCollisions = function () {
-    objects.findCollision(this._x, this._y, 0, false, this.moveForward.bind(this));
+    objects.findCollision(this._x, this._y, 10, false, this.moveForward.bind(this));
 }
 
 _p.moveForward = function () {
@@ -161,60 +155,38 @@ _p.draw = function () {
 };
 
 _p.drawLights = function () {
-    this._drawRangeLight();
+    this._drawPlayerAura();
     if (this._weapon.name == 'flashLight')
-        this._drawFlashLight()
+        this._drawFlashlightAura()
 };
 
-_p._drawRangeLight = function () {
-
-    this._ctx.clearRect(0, 0, 2 * PLAYER_LIGHT_RANGE, 2 * PLAYER_LIGHT_RANGE)
-    var objs = objects.findInRange(this._x, this._y, PLAYER_LIGHT_RANGE);
-
-    var gradient2 = this._ctx.createRadialGradient(PLAYER_LIGHT_RANGE, PLAYER_LIGHT_RANGE, 0, PLAYER_LIGHT_RANGE, PLAYER_LIGHT_RANGE, PLAYER_LIGHT_RANGE);
-    gradient2.addColorStop(1, 'rgba(0,0,0,0)');
-    gradient2.addColorStop(0, 'rgba(255,255,255,1)');
-    drawArc(this._ctx, PLAYER_LIGHT_RANGE, PLAYER_LIGHT_RANGE, PLAYER_LIGHT_RANGE, gradient2);
-
-    this._ctx.globalCompositeOperation = 'destination-out';
-    for (var obj of objs) {
-        var v = new Vector(obj.x - this._x, obj.y - this._y);
-        var alpha = v.getAngle();
-        var fi = Math.asin(obj.radius / v.getSize());
-        var b1 = alpha + fi;
-        var b2 = alpha - fi;
-        var beta1 = b1 + Math.PI / 2;
-        var beta2 = b2 - Math.PI / 2;
-
-        this._ctx.beginPath();
-        this._ctx.arc(PLAYER_LIGHT_RANGE + v[0], PLAYER_LIGHT_RANGE + v[1], obj.radius / 2, beta1, beta2, true);
-        this._ctx.arc(PLAYER_LIGHT_RANGE, PLAYER_LIGHT_RANGE, PLAYER_LIGHT_RANGE, b2, b1);
-        this._ctx.closePath();
-        this._ctx.fillStyle = '#FFF';
-        this._ctx.fill();
-    }
-    this._ctx.globalCompositeOperation = 'source-over';
-
-    ctx.drawImage(this._canvas, canvas.width / 2 - PLAYER_LIGHT_RANGE, canvas.height / 2 - PLAYER_LIGHT_RANGE);
+_p._drawPlayerAura = function () {
+    this._lightAura.create(this._x, this._y);
+    var img = this._lightAura.getImage();
+    ctx.drawImage(img, canvas.width / 2 - PLAYER_LIGHT_RANGE, canvas.height / 2 - PLAYER_LIGHT_RANGE);
 };
 
-_p._drawFlashLight = function () {
+_p._drawFlashlightAura = function () {
     var v = new Vector(user.mx - canvas.width / 2, user.my - canvas.height / 2);
     var angle = v.getAngle();
     var fi = Math.min(Math.PI / 4, Math.atan(LIGHT_WIDTH / v.getSize()));
-    v.toSize(50);
-    var x = canvas.width / 2 + v[0];
-    var y = canvas.height / 2 + v[1];
+    v.toSize(items.flashlight.DISTANCE_FROM_PLAYER); // distance from player
     var maxPower = Math.min(1, Math.PI / 12 / fi)
-    var gradient = ctx.createRadialGradient(x, y, 0, x, y, this._range);
-    gradient.addColorStop(1, 'rgba(0,0,0,0)');
-    gradient.addColorStop(0, 'rgba(255,255,255,' + maxPower + ')');
-    drawArc(ctx, x, y, this._range, gradient, angle - fi, angle + fi);
+
+    this._flashlightAura.set({
+        maxPower: maxPower,
+        startAngle: angle - fi,
+        endAngle: angle + fi
+    });
+
+    this._flashlightAura.create(this._x + v[0], this._y + v[1]);
+    var img = this._flashlightAura.getImage();
+    ctx.drawImage(img, canvas.width/2 + v[0] - items.flashlight.range, canvas.height/2 + v[1] - items.flashlight.range);
 };
 
 _p.see = function (o) {
     var squareSum = (this._x - o.x) * (this._x - o.x) + (this._y - o.y) * (this._y - o.y);
-    return squareSum < this._range * this._range;
+    return squareSum < items.flashlight.range * items.flashlight.range;
 };
 
 _p.getX = function () {

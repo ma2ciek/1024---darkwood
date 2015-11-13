@@ -22,11 +22,11 @@ var randomMap = (function () {
         data: [{ type: 'bg', imgName: 'bg1Tiled' }],
         creatures: []
     };
-    for (var i = 0; i < 40; i++) {
+    for (var i = 0; i < 500; i++) {
         map.data.push({
             type: 'lamp',
-            x: rand(-5000, 5000) | 0,
-            y: rand(-4000, 4000) | 0,
+            x: rand(-10000, 10000) | 0,
+            y: rand(-10000, 10000) | 0,
             r: rand(100, 400) | 0,
             power: rand(0.4, 1),
             on: !!(rand(0.5, 2) | 0)
@@ -34,14 +34,14 @@ var randomMap = (function () {
         map.data.push({
             type: 'tree',
             size: rand(300, 500) | 0,
-            x: rand(-5000, 5000) | 0,
-            y: rand(-4000, 4000) | 0,
+            x: rand(-10000, 10000) | 0,
+            y: rand(-10000, 10000) | 0,
             imgName: 'tree' + (rand(1, 4) | 0)
         });
         map.creatures.push({
             type: 'zombie',
-            x: rand(-5000, 5000) | 0,
-            y: rand(-4000, 4000) | 0,
+            x: rand(-10000, 10000) | 0,
+            y: rand(-10000, 10000) | 0,
         });
     }
     return map;

@@ -3,7 +3,10 @@
         type: 'weapon',
         weight: 3,
         icon: null,
-        meleeDmg: 10
+        meleeDmg: 10,
+        range: 400,
+        DISTANCE_FROM_PLAYER: 50,
+
     },
     knife: {
         type: 'weapon',
