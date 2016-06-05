@@ -1,0 +1,6 @@
+{
+    "compilerOptions": {
+        "module": "umd",
+        "noImplicitAny": true
+    }
+}

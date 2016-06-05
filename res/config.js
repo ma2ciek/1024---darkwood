@@ -1,3 +1,0 @@
-﻿const PLAYER_LIGHT_RANGE = 150;
-const PLAYER_BASIC_SPEED = 3;
-const LIGHT_WIDTH = 50;

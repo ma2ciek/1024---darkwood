@@ -1,55 +1,20 @@
 ﻿<!DOCTYPE html>
 <html>
-	<head>
-		<title>Dark hunter</title>
-		<meta charset="utf-8">
-		<link rel="stylesheet" href="style.css">
-        <script src="res/config.js"></script>
-        <script src="res/polyfill.js"></script>
-        <script src="res/sprites.js"></script>
-        <script src="res/audio.js"></script>
-        <script src="res/weapons.js"></script>
-        <script src="res/loaders.js"></script>
-        <script src="res/creatures.js"></script>
-        <script src="res/images.js"></script>
-        <script src="res/fullscreen.js"></script>
-        <script src="res/map.js"></script>
-        <script src="res/items.js"></script>
 
-        <script src="classes/EventEmitter.js"></script>
-        <script src="classes/Sprite.js"></script>
-        <script src="classes/Player.js"></script>
-        <script src="classes/Geometry.js"></script>
-        <script src="classes/Counter.js"></script>
-        <script src="classes/SoundTrack.js"></script>
-        <script src="classes/Equipment.js"></script>
-        <script src="classes/Light.js"></script>
+<head>
+    <title>Dark hunter</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.js"></script>
+    <script>
+        require(['build/Game.js'], function(Game) {
+            window.game = new Game.default();
+        })
+    </script>
+</head>
 
-        <script src="classes/game-objects/GameObject.js"></script>
-        <script src="classes/game-objects/Background.js"></script>
-        <script src="classes/game-objects/Wall.js"></script>
-        <script src="classes/game-objects/Lamp.js"></script>
-        <script src="classes/game-objects/Blood.js"></script>
-        <script src="classes/game-objects/Tree.js"></script>
-        <script src="classes/game-objects/Trophy.js"></script>
-        <script src="classes/GameObjectManager.js"></script>
+<body>
+    <canvas></canvas>
+</body>
 
-        <script src="classes/opponents/Opponent.js"></script>
-        <script src="classes/opponents/Zombie.js"></script>
-        <script src="classes/OpponentManager.js"></script>
-
-        <script src="classes/Game.js"></script>
-
-        <script src="classes/user/User.js"></script>
-        <script src="classes/user/Keyboard.js"></script>
-
-        <script src="modules/bulletManager.js"></script>
-        <script src="modules/audioManager.js"></script>
-        <script src="modules/imageManager.js"></script>
-
-		<script src="main.js"></script>
-	</head>
-	<body>
-		<canvas></canvas>
-	</body>
 </html>
